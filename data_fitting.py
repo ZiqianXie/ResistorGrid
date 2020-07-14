@@ -6,7 +6,7 @@ from scipy import interpolate
 
 df = pd.read_excel("Data.xlsx").set_index("time")
 peak_annotation = [[154, 252], [171, 271], [147, 248]]
-N_resistor_horizontal = 50
+N_resistor_horizontal = 24
 N_resistor_vertical = 24
 data_len = (N_resistor_horizontal + 1) * (N_resistor_vertical + 1) - 1
 data = [df[[c]].dropna() for c in df.columns if "Nowall" in c]
