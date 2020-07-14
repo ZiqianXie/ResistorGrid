@@ -24,9 +24,10 @@ def pos_at(t):
     p = t % period
     return p * (p <= N) + (period - 1 - p) * (p > N)
 
-hr = 5.5e-4
-vr1 = 5.5e-4
-vr2 = 1.2e-4
+
+hr = 1  # 5.5e-4
+vr1 = 1  # 5.5e-4
+vr2 = 1  # 1.2e-4
 omega = np.zeros((N+2, N+2))  # pairwise resistance
 omega[1:-1, 1:-1] = np.abs(np.arange(N).reshape(-1, 1) - np.arange(N).reshape(1, -1)) * hr  # initialize as a series of resistors
 omega[0, :] = omega[1, :]  # make extra copy of the first and last positions
