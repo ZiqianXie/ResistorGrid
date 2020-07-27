@@ -49,12 +49,16 @@ if __name__ == "__main__":
     r_horizontal = N_resistor_vertical/N_resistor_horizontal
     r_vertical_1 = 0.5
     r_vertical_2 = 1
+    defect_indices = [40, 41, 42, 43]
     grid = ResistorNetwork(N_resistor_horizontal+1, (0, 0))
     r = []
     direction = (1, 0)
     pos = (0, 0)
     for i in range((N_resistor_horizontal+1)*(N_resistor_vertical+1)-1):
         new_pos = (pos[0] + direction[0], pos[1] + direction[1])
+        if i in defect_indices:
+            r_horizontal_origin, r_vertical_1_origin, r_vertical_2_origin = r_horizontal, r_vertical_1, r_vertical_2
+            r_horizontal, r_vertical_1, r_vertical_2 = [1e2] * 3
         if direction == (0, 1):
             grid.connect(pos, new_pos, r_vertical_1)
         else:
@@ -74,6 +78,8 @@ if __name__ == "__main__":
             direction = (0, 1)
         elif pos[0] == 0 and direction == (0, 1):
             direction = (1, 0)
+        if i in defect_indices:
+            r_horizontal, r_vertical_1, r_vertical_2 = r_horizontal_origin, r_vertical_1_origin, r_vertical_2_origin
         r.append(grid.get_resistance((0, 0), pos))
 
 
