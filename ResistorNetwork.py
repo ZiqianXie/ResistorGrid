@@ -47,9 +47,9 @@ if __name__ == "__main__":
     N_resistor_horizontal = 24
     N_resistor_vertical = 24
     r_horizontal = N_resistor_vertical/N_resistor_horizontal
-    r_vertical_1 = 0.5
-    r_vertical_2 = 1
-    defect_indices = [40, 41, 42, 43]
+    r_vertical_1 = 1 # overlapping resistance
+    r_vertical_2 = 0.5
+    defect_indices = {40, 41, 42, 43, 44, 45}
     grid = ResistorNetwork(N_resistor_horizontal+1, (0, 0))
     r = []
     direction = (1, 0)
@@ -58,7 +58,7 @@ if __name__ == "__main__":
         new_pos = (pos[0] + direction[0], pos[1] + direction[1])
         if i in defect_indices:
             r_horizontal_origin, r_vertical_1_origin, r_vertical_2_origin = r_horizontal, r_vertical_1, r_vertical_2
-            r_horizontal, r_vertical_1, r_vertical_2 = [1e2] * 3
+            r_horizontal, r_vertical_1, r_vertical_2 = [2, 1, np.inf]
         if direction == (0, 1):
             grid.connect(pos, new_pos, r_vertical_1)
         else:
