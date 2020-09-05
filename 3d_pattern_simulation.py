@@ -1,5 +1,6 @@
 from ResistorNetwork import ResistorNetwork
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 n_resistor_x = 20
@@ -99,8 +100,7 @@ if __name__ == "__main__":
                 grid.free(pos_below)
         # print(grid.get_resistance(pos, start), pos, len(grid._unused_index))
         return grid.get_resistance(pos, start), pos
-
     r = simulation(start, grid, traj, defect_pos, neighbor_con)
-
+plt.plot(list(map(lambda x: x[0], r)))
 
 
