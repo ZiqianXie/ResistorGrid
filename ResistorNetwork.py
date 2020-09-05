@@ -1,4 +1,5 @@
 import numpy as np
+np.seterr(invalid="ignore")
 
 
 class ResistorNetwork:
