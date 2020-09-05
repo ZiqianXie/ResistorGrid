@@ -101,6 +101,6 @@ if __name__ == "__main__":
         # print(grid.get_resistance(pos, start), pos, len(grid._unused_index))
         return grid.get_resistance(pos, start), pos
     r = simulation(start, grid, traj, defect_pos, neighbor_con)
-plt.plot(list(map(lambda x: x[0], r)))
+    plt.plot(list(map(lambda x: x[0], r)))
 
 
