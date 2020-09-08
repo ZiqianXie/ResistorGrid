@@ -58,11 +58,15 @@ def simulation(start, grid, trajectory, defect_pos, neighbor_con):
 
 
 if __name__ == "__main__":
-    r_u = 1  # resistance along the printed line
-    r_o = 2  # within layer overlapping resistance
+    r_u_x = 1  # resistance along the printed line, x axis
+    r_u_y = 1  # resistance along the printed line, y axis
+    r_o_x = 2  # within layer overlapping resistance, x axis
+    r_o_y = 2  # within layer overlapping resistance, y axis
     r_z = 1  # between layer contacting resistance
-    r_u_def = 2  # resistance along the printed line when defect
-    r_o_def = np.inf  # within layer overlapping resistance when defect
+    r_u_def_x = 2  # resistance along the printed line when defect, x axis
+    r_u_def_y = 2  # resistance along the printed line when defect, y axis
+    r_o_def_x = np.inf  # within layer overlapping resistance when defect, x axis
+    r_o_def_y = np.inf  # within layer overlapping resistance when defect, y axis
     r_z_def = 2  # between layer contacting resistance when defect
     start = (0, 0, 0)
     grid = ResistorNetwork(nx * ny, start)
@@ -81,17 +85,19 @@ if __name__ == "__main__":
 
         pos, prev_pos = trajectory.step()
         if defect_pos(pos):
-            r1 = r_u_def
-            r2 = r_o_def
+            r1 = [r_u_def_x, r_u_def_y, r_z_def]
+            r2 = [r_o_def_x, r_o_def_y]
             r3 = r_z_def
         else:
-            r1 = r_u
-            r2 = r_o
+            r1 = [r_u_x, r_u_y, r_z]
+            r2 = [r_o_x, r_o_y]
             r3 = r_z
-        grid.connect(pos, prev_pos, r1)
+        d = np.argmax(np.abs(pos - prev_pos))
+        grid.connect(pos, prev_pos, r1[d])
         pos_overlap = tuple(np.array(pos) - traj.dir_short)
+        d1 = np.argmax(np.abs(traj.dir_short))
         if within_boundary(pos_overlap) and pos_overlap != prev_pos:
-            grid.connect(pos, pos_overlap, r2)
+            grid.connect(pos, pos_overlap, r2[d1])
         pos_below = tuple(np.array(pos) - np.array([0, 0, 1]))
         if within_boundary(pos_below):
             if pos_below != prev_pos:
