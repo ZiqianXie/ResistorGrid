@@ -3,9 +3,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-n_resistor_x = 40
-n_resistor_y = 40
-n_resistor_z = 10
+n_resistor_x = 19
+n_resistor_y = 29
+n_resistor_z = 7
 nx = n_resistor_x + 1
 ny = n_resistor_y + 1
 nz = n_resistor_z + 1
@@ -31,8 +31,10 @@ class CubeTrajectoryWithJump:
             return self.pos, self.pos
         if self.cnt % self.area == 0:
             self.jump = True
-            self.dir_short = np.abs(self.dir_long)
-            self.dir_long[:2] = np.ones(2) - self.dir_short[:2]
+            # self.dir_short = np.abs(self.dir_long)
+            # self.dir_long[:2] = np.ones(2) - self.dir_short[:2]
+            self.dir_long = np.abs(self.dir_long)
+            self.dir_short = np.array([1, 1, 0]) - self.dir_long
             self.dir_cur = self.dir_long
             self.pos = np.array([0, 0, self.pos[2] + 1]) - self.dir_long
         elif self.cnt % np.array(self.n)[np.abs(self.dir_long).astype('bool')][0] == 0:
@@ -48,7 +50,7 @@ class CubeTrajectoryWithJump:
 def simulation(start, grid, trajectory, defect_pos, neighbor_con):
     r = []
     for i in range(trajectory.vol - 1):
-        print(i)
+        # print(i)
         r.append(neighbor_con(start, grid, trajectory, defect_pos))
     return r
 
@@ -103,10 +105,13 @@ if __name__ == "__main__":
         # print(grid.get_resistance(pos, start), pos, len(grid._unused_index))
         return grid.get_resistance(pos, start), pos
     r = simulation(start, grid, traj, defect_pos, neighbor_con)
-    spatial_r = np.zeros((nx, ny, nz))
+    spatial_r = np.zeros((ny, nx, nz))
     for resistance, (i, j, k) in r:
-        spatial_r[i, j, k] = resistance
+        spatial_r[j, i, k] = resistance
     for i in range(nz):
-        plt.figure()
-        plt.imshow(spatial_r[..., i])
-        plt.show()
+        plt.subplot(f"42{i+1}")
+        plt.imshow(np.flipud(spatial_r[..., i]), cmap="rainbow")
+        plt.colorbar()
+        plt.title(f"layer {i+1}")
+    plt.figure()
+    plt.plot(list(map(lambda x: x[0], r)))
